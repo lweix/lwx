@@ -1,0 +1,62 @@
+package lwx;
+import java.awt.List;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.Reader;
+import java.util.ArrayList;
+public class readtxt {
+    static ArrayList<String> list=new ArrayList<>();
+    public static void readFileByLines(String filename) throws IOException {
+
+        File file = new File(filename);
+        BufferedReader reader=null;
+        InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream(file), "GBK");
+        reader = new BufferedReader(inputStreamReader);
+        //用reader.readLine()
+        String tempString = reader.readLine();
+        while((tempString = reader.readLine())!= null)
+        {
+
+            list.add(tempString);
+        }
+        inputStreamReader.close();
+        reader.close();
+    }
+
+    public static void main(String[] args) throws IOException {
+        readFileByLines("D://yq_in.txt");
+
+        String[][] string = new String[list.size()][];
+        for(int i = 0;i<list.size();i++)
+        {
+            string[i] = list.get(i).split("\\s+");
+        }
+        File file = new File("D://yq_out.txt");
+        FileOutputStream out = new FileOutputStream(file);
+        OutputStreamWriter wr =new OutputStreamWriter(out);
+
+        String loc = string[0][0];
+        wr.write(loc+"\r\n");
+        for(int j =0 ;j < string.length;j++)
+        {
+            if(string[j][0].equals(loc))
+            {
+
+                wr.write(string[j][1]+"            "+string[j][2]+"\r\n");
+            }
+            else
+            {
+                wr.write("\r\n"+string[j][0]+"\r\n");
+                wr.write(string[j][1]+"            "+string[j][2]+"\r\n");
+
+                loc = string[j][0];
+            }
+        }
+        wr.close();
+    }
+}
